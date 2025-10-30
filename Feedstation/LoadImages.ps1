@@ -1,0 +1,1 @@
+Get-ChildItem -Filter *.tar | ForEach-Object { docker load -i $_.FullName }
