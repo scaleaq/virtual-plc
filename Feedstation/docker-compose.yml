@@ -1,0 +1,22 @@
+services:
+  vEdge:
+    container_name: vEdge
+    hostname: vEdge
+    user: root
+    environment:
+        - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - CONTAINER=true
+        - USER=root
+    volumes:
+        - /var/opt/codesysvcontrol/instances/vEdge/conf/codesysedge:/conf/codesysedge/
+        - /var/opt/codesysvcontrol/instances/vEdge/data/codesysedge:/data/codesysedge/
+    networks:
+        - automat-network
+    working_dir: /var/opt/codesysedge/
+    ports:
+        - 1217:1217
+    restart: no
+    runtime: runc
+    tty: true
+    image: codesysedge_edgeamd64:4.17.0.0
+

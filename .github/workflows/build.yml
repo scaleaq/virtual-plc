@@ -1,0 +1,34 @@
+
+name: build
+
+on:
+  push:
+    branches:
+      - "main"
+env:
+  TASK_X_REMOTE_TASKFILES: '1'
+  TASKFILES_TOKEN: ${{ secrets.TASKFILES_TOKEN }}
+  DOTNET_VERSION: ${{ '8.0.x' }}
+  DOCKER_USERNAME: ${{ vars.SP_GITHUB_ACTIONS_CLIENT_ID }}
+
+jobs:
+  build-image:
+    runs-on: scale
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Task
+        uses: go-task/setup-task@v1
+        with:
+          version: 3.x
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build docker build image
+        run: |
+          task -l --yes
+          task docker:setup-docker-buildx
+          task docker:login-to-docker-registry DOCKER_USERNAME=${{ env.DOCKER_USERNAME }} DOCKER_PASSWORD=${{ secrets.SP_GITHUB_ACTIONS_CLIENT_SECRET }}
+          task docker:build CI=true PAT=${{ secrets.NUGET_TOKEN }} TARGET=build
+        env:
+          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      - name: Build docker image
+        run: |
+          task docker:build CI=true VERSION=v0.0.${{github.run_number}}-dev PAT=${{ secrets.NUGET_TOKEN }}

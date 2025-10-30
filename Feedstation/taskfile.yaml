@@ -1,0 +1,12 @@
+version: '3'
+vars:
+  NAME: virtual-plc-control # name of the docker image produced, i.e. generator-api
+  TASKFILE_TAG: v1.4.22 # Tag of the taskfiles repo to use for includes
+
+# external taskfiles to include
+includes:
+  docker: https://{{.TASKFILES_TOKEN}}@raw.githubusercontent.com/scaleaq/taskfiles/{{.TASKFILE_TAG}}/docker/Taskfile.buildx.yaml
+  retag: https://{{.TASKFILES_TOKEN}}@raw.githubusercontent.com/scaleaq/taskfiles/{{.TASKFILE_TAG}}/docker/Taskfile.retag.yaml
+  dotnet: https://{{.TASKFILES_TOKEN}}@raw.githubusercontent.com/scaleaq/taskfiles/{{.TASKFILE_TAG}}/dotnet/Taskfile.dotnet.yaml
+  nuget: https://{{.TASKFILES_TOKEN}}@raw.githubusercontent.com/scaleaq/taskfiles/{{.TASKFILE_TAG}}/dotnet/Taskfile.nuget.yaml
+  semantic-release: https://{{.TASKFILES_TOKEN}}@raw.githubusercontent.com/scaleaq/taskfiles/{{.TASKFILE_TAG}}/semantic-release/Taskfile.semantic-release.yaml
